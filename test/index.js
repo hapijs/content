@@ -72,6 +72,22 @@ describe('type()', function () {
 
 describe('disposition()', function (done) {
 
+    it('parses header', function (done) {
+
+        var header = 'form-data; name="file"; filename=file.jpg';
+
+        expect(Content.disposition(header)).to.deep.equal({ name: 'file', filename: 'file.jpg' });
+        done();
+    });
+
+    it('parses header (empty filename)', function (done) {
+
+        var header = 'form-data; name="file"; filename=""';
+
+        expect(Content.disposition(header)).to.deep.equal({ name: 'file', filename: '' });
+        done();
+    });
+
     it('handles language filename', function (done) {
 
         var header = 'form-data; name="file"; filename*=utf-8\'en\'with%20space';
