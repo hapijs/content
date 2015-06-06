@@ -2,7 +2,9 @@
 
 HTTP Content-* headers parsing.
 
-[![Build Status](https://secure.travis-ci.org/hapijs/content.png)](http://travis-ci.org/hapijs/content)
+[![NPM Version](https://badge.fury.io/js/content.svg)](http://badge.fury.io/js/content)
+[![Build Status](https://secure.travis-ci.org/hapijs/content.svg)](http://travis-ci.org/hapijs/content)
+[![Dependencies](https://david-dm.org/hapijs/content.svg)](https://david-dm.org/hapijs/content)
 
 Lead Maintainer - [Rui Quelhas](https://github.com/ruiquelhas)
 
@@ -10,8 +12,8 @@ Lead Maintainer - [Rui Quelhas](https://github.com/ruiquelhas)
 
 - [Installation](#installation)
 - [Usage](#usage)
-    - [`type(header)`](#encoding)
-    - [`disposition(header)`](#disposition)
+    - [`type(header)`](#typeheader)
+    - [`disposition(header)`](#dispositionheader)
 
 ## Installation
 
