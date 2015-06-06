@@ -23,25 +23,25 @@ describe('type()', function () {
     it('parses header', function (done) {
 
         var type = Content.type('application/json; some=property; and="another"');
-        expect(type.isBoom).to.not.exist;
+        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
-        expect(type.boundary).to.not.exist;
+        expect(type.boundary).to.not.exist();
         done();
     });
 
     it('parses header (only type)', function (done) {
 
         var type = Content.type('application/json');
-        expect(type.isBoom).to.not.exist;
+        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
-        expect(type.boundary).to.not.exist;
+        expect(type.boundary).to.not.exist();
         done();
     });
 
     it('parses header (boundary)', function (done) {
 
         var type = Content.type('application/json; boundary=abcdefghijklm');
-        expect(type.isBoom).to.not.exist;
+        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
         expect(type.boundary).to.equal('abcdefghijklm');
         done();
@@ -50,7 +50,7 @@ describe('type()', function () {
     it('parses header (quoted boundary)', function (done) {
 
         var type = Content.type('application/json; boundary="abcdefghijklm"');
-        expect(type.isBoom).to.not.exist;
+        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
         expect(type.boundary).to.equal('abcdefghijklm');
         done();
@@ -59,14 +59,14 @@ describe('type()', function () {
     it('errors on invalid header', function (done) {
 
         var type = Content.type('application/json; some');
-        expect(type.isBoom).to.exist;
+        expect(type.isBoom).to.exist();
         done();
     });
 
     it('errors on multipart missing boundary', function (done) {
 
         var type = Content.type('multipart/form-data');
-        expect(type.isBoom).to.exist;
+        expect(type.isBoom).to.exist();
         done();
     });
 });
