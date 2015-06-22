@@ -27,10 +27,5 @@
     "test-cov": "lab -t 100",
     "test-cov-html": "lab -r html -o coverage.html"
   },
-  "licenses": [
-    {
-      "type": "BSD",
-      "url": "http://github.com/hapijs/content/raw/master/LICENSE"
-    }
-  ]
+  "license": "BSD-3-Clause"
 }
