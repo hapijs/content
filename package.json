@@ -3,7 +3,7 @@
   "description": "HTTP Content-* headers parsing",
   "version": "1.0.1",
   "repository": "git://github.com/hapijs/content",
-  "main": "index",
+  "main": "lib/index.js",
   "keywords": [
     "HTTP",
     "header",
