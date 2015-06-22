@@ -71,7 +71,7 @@ describe('type()', function () {
     });
 });
 
-describe('disposition()', function (done) {
+describe('disposition()', function () {
 
     it('parses header', function (done) {
 
