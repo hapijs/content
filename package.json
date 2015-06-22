@@ -23,7 +23,9 @@
     "code": "1.x.x"
   },
   "scripts": {
-    "test": "make test-cov"
+    "test": "lab",
+    "test-cov": "lab -t 100",
+    "test-cov-html": "lab -r html -o coverage.html"
   },
   "licenses": [
     {
