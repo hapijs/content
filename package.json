@@ -3,7 +3,7 @@
   "description": "HTTP Content-* headers parsing",
   "version": "1.0.1",
   "repository": "git://github.com/hapijs/content",
-  "main": "index",
+  "main": "lib/index.js",
   "keywords": [
     "HTTP",
     "header",
@@ -23,12 +23,9 @@
     "code": "1.x.x"
   },
   "scripts": {
-    "test": "make test-cov"
+    "test": "lab -a code -t 100 -L",
+    "test-tap": "lab -a code -r tap -o tests.tap",
+    "test-cov-html": "lab -a code -r html -o coverage.html"
   },
-  "licenses": [
-    {
-      "type": "BSD",
-      "url": "http://github.com/hapijs/content/raw/master/LICENSE"
-    }
-  ]
+  "license": "BSD-3-Clause"
 }
