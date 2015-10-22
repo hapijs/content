@@ -12,7 +12,7 @@
     "content-disposition"
   ],
   "engines": {
-    "node": ">=0.10.32"
+    "node": ">=4.2"
   },
   "dependencies": {
     "boom": "2.x.x"
