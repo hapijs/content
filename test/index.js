@@ -79,7 +79,7 @@ describe('disposition()', () => {
 
         const header = 'form-data; name="file"; filename=file.jpg';
 
-        expect(Content.disposition(header)).to.deep.equal({ name: 'file', filename: 'file.jpg' });
+        expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'file.jpg' });
         done();
     });
 
@@ -87,7 +87,7 @@ describe('disposition()', () => {
 
         const header = 'form-data; name="file"; filename=""';
 
-        expect(Content.disposition(header)).to.deep.equal({ name: 'file', filename: '' });
+        expect(Content.disposition(header)).to.equal({ name: 'file', filename: '' });
         done();
     });
 
@@ -95,7 +95,7 @@ describe('disposition()', () => {
 
         const header = 'form-data; name="file"; filename*=utf-8\'en\'with%20space';
 
-        expect(Content.disposition(header)).to.deep.equal({ name: 'file', filename: 'with space' });
+        expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'with space' });
         done();
     });
 
