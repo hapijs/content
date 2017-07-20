@@ -91,6 +91,14 @@ describe('disposition()', () => {
         done();
     });
 
+    it('parses header (filename with quotes)', (done) => {
+
+        const header = 'form-data; name="file"; filename="fi\'l\'e.jpg"';
+
+        expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'fi\'l\'e.jpg' });
+        done();
+    });
+
     it('handles language filename', (done) => {
 
         const header = 'form-data; name="file"; filename*=utf-8\'en\'with%20space';
