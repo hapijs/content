@@ -6,7 +6,7 @@ HTTP Content-* headers parsing.
 [![Build Status](https://secure.travis-ci.org/hapijs/content.svg)](http://travis-ci.org/hapijs/content)
 [![Dependencies](https://david-dm.org/hapijs/content.svg)](https://david-dm.org/hapijs/content)
 
-Lead Maintainer - [Rui Quelhas](https://github.com/ruiquelhas)
+Lead Maintainer - [Eran Hammer](https://github.com/hueniverse)
 
 ## Table of Contents
 

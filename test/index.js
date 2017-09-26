@@ -14,150 +14,134 @@ const internals = {};
 
 // Test shortcuts
 
-const lab = exports.lab = Lab.script();
-const describe = lab.describe;
-const it = lab.it;
+const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
 
 
 describe('type()', () => {
 
-    it('parses header', (done) => {
+    it('parses header', async () => {
 
         const type = Content.type('application/json; some=property; and="another"');
-        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
         expect(type.boundary).to.not.exist();
-        done();
     });
 
-    it('parses header (only type)', (done) => {
+    it('parses header (only type)', async () => {
 
         const type = Content.type('application/json');
-        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
         expect(type.boundary).to.not.exist();
-        done();
     });
 
-    it('parses header (boundary)', (done) => {
+    it('parses header (boundary)', async () => {
 
         const type = Content.type('application/json; boundary=abcdefghijklm');
-        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
         expect(type.boundary).to.equal('abcdefghijklm');
-        done();
     });
 
-    it('parses header (quoted boundary)', (done) => {
+    it('parses header (quoted boundary)', async () => {
 
         const type = Content.type('application/json; boundary="abcdefghijklm"');
-        expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
         expect(type.boundary).to.equal('abcdefghijklm');
-        done();
     });
 
-    it('errors on invalid header', (done) => {
+    it('handles large number of OWS', async () => {
 
-        const type = Content.type('application/json; some');
-        expect(type.isBoom).to.exist();
-        done();
+        const now = Date.now();
+        expect(() => Content.type(`l/h ; ${new Array(80000).join(' ')}"`)).to.throw();
+        expect(Date.now() - now).to.be.below(100);
     });
 
-    it('errors on multipart missing boundary', (done) => {
+    it('errors on invalid header', async () => {
 
-        const type = Content.type('multipart/form-data');
-        expect(type.isBoom).to.exist();
-        done();
+        expect(() => Content.type('application/json; some')).to.throw();
+    });
+
+    it('errors on multipart missing boundary', async () => {
+
+        expect(() => Content.type('multipart/form-data')).to.throw();
     });
 });
 
 describe('disposition()', () => {
 
-    it('parses header', (done) => {
+    it('parses header', async () => {
 
         const header = 'form-data; name="file"; filename=file.jpg';
 
         expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'file.jpg' });
-        done();
     });
 
-    it('parses header (empty filename)', (done) => {
+    it('parses header (empty filename)', async () => {
 
         const header = 'form-data; name="file"; filename=""';
 
         expect(Content.disposition(header)).to.equal({ name: 'file', filename: '' });
-        done();
     });
 
-    it('parses header (filename with quotes)', (done) => {
+    it('parses header (filename with quotes)', async () => {
 
         const header = 'form-data; name="file"; filename="fi\'l\'e.jpg"';
 
         expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'fi\'l\'e.jpg' });
-        done();
     });
 
-    it('handles language filename', (done) => {
+    it('handles language filename', async () => {
 
         const header = 'form-data; name="file"; filename*=utf-8\'en\'with%20space';
 
         expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'with space' });
-        done();
     });
 
-    it('errors on invalid language filename', (done) => {
+    it('handles large number of OWS', async () => {
+
+        const now = Date.now();
+        const header = `form-data; x; ${new Array(5000).join(' ')};`;
+        expect(() => Content.disposition(header)).to.throw();
+        expect(Date.now() - now).to.be.below(100);
+    });
+
+    it('errors on invalid language filename', async () => {
 
         const header = 'form-data; name="file"; filename*=steve';
-
-        expect(Content.disposition(header).message).to.equal('Invalid content-disposition header format includes invalid parameters');
-        done();
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
     });
 
-    it('errors on invalid format', (done) => {
+    it('errors on invalid format', async () => {
 
         const header = 'steve';
-
-        expect(Content.disposition(header).message).to.equal('Invalid content-disposition header format');
-        done();
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format');
     });
 
-    it('errors on missing header', (done) => {
+    it('errors on missing header', async () => {
 
-        expect(Content.disposition('').message).to.equal('Missing content-disposition header');
-        done();
+        expect(() => Content.disposition('')).to.throw('Missing content-disposition header');
     });
 
-    it('errors on missing parameters', (done) => {
+    it('errors on missing parameters', async () => {
 
         const header = 'form-data';
-
-        expect(Content.disposition(header).message).to.equal('Invalid content-disposition header missing parameters');
-        done();
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header missing parameters');
     });
 
-    it('errors on missing language value', (done) => {
+    it('errors on missing language value', async () => {
 
         const header = 'form-data; name="file"; filename*=';
-
-        expect(Content.disposition(header).message).to.equal('Invalid content-disposition header format includes invalid parameters');
-        done();
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
     });
 
-    it('errors on invalid percent encoded language value', (done) => {
+    it('errors on invalid percent encoded language value', async () => {
 
         const header = 'form-data; name="file"; filename*=utf-8\'en\'with%vxspace';
-
-        expect(Content.disposition(header).message).to.equal('Invalid content-disposition header format includes invalid parameters');
-        done();
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
     });
 
-    it('errors on missing name', (done) => {
+    it('errors on missing name', async () => {
 
         const header = 'form-data; filename=x';
-
-        expect(Content.disposition(header).message).to.equal('Invalid content-disposition header missing name parameter');
-        done();
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header missing name parameter');
     });
 });
