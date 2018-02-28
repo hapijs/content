@@ -51,13 +51,13 @@ describe('type()', () => {
     it('handles large number of OWS', () => {
 
         const now = Date.now();
-        expect(() => Content.type(`l/h ; ${new Array(80000).join(' ')}"`)).to.throw();
+        Content.type(`l/h ; ${new Array(80000).join(' ')}"`);
         expect(Date.now() - now).to.be.below(100);
     });
 
     it('errors on invalid header', () => {
 
-        expect(() => Content.type('application/json; some')).to.throw();
+        expect(() => Content.type('application; some')).to.throw();
     });
 
     it('errors on multipart missing boundary', () => {
