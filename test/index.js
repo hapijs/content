@@ -34,17 +34,24 @@ describe('type()', () => {
         expect(type.boundary).to.not.exist();
     });
 
-    it('parses header (boundary)', () => {
+    it('parses header (boundary without multipart)', () => {
 
         const type = Content.type('application/json; boundary=abcdefghijklm');
         expect(type.mime).to.equal('application/json');
+        expect(type.boundary).to.not.exist();
+    });
+
+    it('parses header (boundary)', () => {
+
+        const type = Content.type('multipart/form-data; boundary=abcdefghijklm');
+        expect(type.mime).to.equal('multipart/form-data');
         expect(type.boundary).to.equal('abcdefghijklm');
     });
 
     it('parses header (quoted boundary)', () => {
 
-        const type = Content.type('application/json; boundary="abcdefghijklm"');
-        expect(type.mime).to.equal('application/json');
+        const type = Content.type('multipart/form-data; boundary="abcdefghijklm"');
+        expect(type.mime).to.equal('multipart/form-data');
         expect(type.boundary).to.equal('abcdefghijklm');
     });
 
@@ -63,6 +70,11 @@ describe('type()', () => {
     it('errors on multipart missing boundary', () => {
 
         expect(() => Content.type('multipart/form-data')).to.throw();
+    });
+
+    it('errors on multipart missing boundary (other params)', () => {
+
+        expect(() => Content.type('multipart/form-data; some=thing')).to.throw();
     });
 });
 
