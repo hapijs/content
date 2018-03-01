@@ -40,34 +40,59 @@ describe('type()', () => {
         done();
     });
 
-    it('parses header (boundary)', (done) => {
+    it('parses header (not multipart)', (done) => {
+
+        const type = Content.type('application/json');
+        expect(type.isBoom).to.not.exist();
+        expect(type.mime).to.equal('application/json');
+        expect(type.boundary).to.not.exist();
+        done();
+    });
+
+    it('parses header (not multipart with boundary)', (done) => {
 
         const type = Content.type('application/json; boundary=abcdefghijklm');
         expect(type.isBoom).to.not.exist();
         expect(type.mime).to.equal('application/json');
+        expect(type.boundary).to.not.exist();
+        done();
+    });
+
+    it('parses header (boundary)', (done) => {
+
+        const type = Content.type('multipart/form-data; boundary=abcdefghijklm');
+        expect(type.isBoom).to.not.exist();
+        expect(type.mime).to.equal('multipart/form-data');
         expect(type.boundary).to.equal('abcdefghijklm');
         done();
     });
 
     it('parses header (quoted boundary)', (done) => {
 
-        const type = Content.type('application/json; boundary="abcdefghijklm"');
+        const type = Content.type('multipart/form-data; boundary="abcdefghijklm"');
         expect(type.isBoom).to.not.exist();
-        expect(type.mime).to.equal('application/json');
+        expect(type.mime).to.equal('multipart/form-data');
         expect(type.boundary).to.equal('abcdefghijklm');
-        done();
-    });
-
-    it('errors on invalid header', (done) => {
-
-        const type = Content.type('application/json; some');
-        expect(type.isBoom).to.exist();
         done();
     });
 
     it('errors on multipart missing boundary', (done) => {
 
         const type = Content.type('multipart/form-data');
+        expect(type.isBoom).to.exist();
+        done();
+    });
+
+    it('errors on multipart missing boundary (with params)', (done) => {
+
+        const type = Content.type('multipart/form-data; some=thing');
+        expect(type.isBoom).to.exist();
+        done();
+    });
+
+    it('errors on invalid header', (done) => {
+
+        const type = Content.type('multipart');
         expect(type.isBoom).to.exist();
         done();
     });
