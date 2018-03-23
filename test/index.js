@@ -62,6 +62,11 @@ describe('type()', () => {
         expect(Date.now() - now).to.be.below(100);
     });
 
+    it('errors on missing header', () => {
+
+        expect(() => Content.type()).to.throw();
+    });
+
     it('errors on invalid header', () => {
 
         expect(() => Content.type('application; some')).to.throw();
