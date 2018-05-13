@@ -81,6 +81,14 @@ describe('type()', () => {
 
         expect(() => Content.type('multipart/form-data; some=thing')).to.throw();
     });
+
+    it('handles multiple boundary params', () => {
+
+        const header = '0/\\x00;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#"';
+        const now = Date.now();
+        Content.type(header);
+        expect(Date.now() - now).to.be.below(100);
+    });
 });
 
 describe('disposition()', () => {
