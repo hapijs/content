@@ -11,9 +11,6 @@
     "content-type",
     "content-disposition"
   ],
-  "engines": {
-    "node": ">=8.12.0"
-  },
   "dependencies": {
     "boom": "7.x.x"
   },
