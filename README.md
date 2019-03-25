@@ -2,11 +2,11 @@
 
 HTTP Content-* headers parsing.
 
-[![NPM Version](https://badge.fury.io/js/content.svg)](http://badge.fury.io/js/content)
-[![Build Status](https://secure.travis-ci.org/hapijs/content.svg)](http://travis-ci.org/hapijs/content)
-[![Dependencies](https://david-dm.org/hapijs/content.svg)](https://david-dm.org/hapijs/content)
+[![Build Status](https://travis-ci.org/hapijs/content.svg?branch=v3-commercial)](https://travis-ci.org/hapijs/content)
 
-Lead Maintainer - [Rui Quelhas](https://github.com/ruiquelhas)
+## License
+
+This version of the package requires a commercial license. You may not use, copy, or distribute it without first acquiring a commercial license from Sideway Inc. Using this software without a license is a violation of US and international law. To obtain a license, please contact [sales@sideway.com](mailto:sales@sideway.com). The open source version of this package can be found [here](https://github.com/hapijs/content).
 
 ## Table of Contents
 
