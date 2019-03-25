@@ -2,9 +2,7 @@
 
 HTTP Content-* headers parsing.
 
-[![NPM Version](https://badge.fury.io/js/content.svg)](http://badge.fury.io/js/content)
 [![Build Status](https://secure.travis-ci.org/hapijs/content.svg)](http://travis-ci.org/hapijs/content)
-[![Dependencies](https://david-dm.org/hapijs/content.svg)](https://david-dm.org/hapijs/content)
 
 Lead Maintainer - [Eran Hammer](https://github.com/hueniverse)
 
