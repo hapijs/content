@@ -1,10 +1,16 @@
 {
   "name": "@hapi/content",
   "description": "HTTP Content-* headers parsing",
-  "version": "4.0.6",
+  "version": "4.1.0",
   "repository": "git://github.com/hapijs/content",
   "main": "lib/index.js",
-  "keywords": ["HTTP", "header", "content", "content-type", "content-disposition"],
+  "keywords": [
+    "HTTP",
+    "header",
+    "content",
+    "content-type",
+    "content-disposition"
+  ],
   "dependencies": {
     "@hapi/boom": "7.x.x"
   },
