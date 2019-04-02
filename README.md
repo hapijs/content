@@ -6,20 +6,6 @@ HTTP Content-* headers parsing.
 
 Lead Maintainer - [Eran Hammer](https://github.com/hueniverse)
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-    - [`type(header)`](#typeheader)
-    - [`disposition(header)`](#dispositionheader)
-
-## Installation
-
-Install via [NPM](https://www.npmjs.org).
-
-```
-$ npm install content
-```
 
 ## Usage
 
