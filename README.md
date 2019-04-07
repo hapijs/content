@@ -1,11 +1,10 @@
+<a href="http://hapijs.com"><img src="https://github.com/hapijs/assets/blob/master/images/family.svg" width="180px" align="right" /></a>
+
 # content
 
 HTTP Content-* headers parsing.
 
 [![Build Status](https://secure.travis-ci.org/hapijs/content.svg)](http://travis-ci.org/hapijs/content)
-
-Lead Maintainer - [Eran Hammer](https://github.com/hueniverse)
-
 
 ## Usage
 
