@@ -4,7 +4,7 @@
 
 HTTP Content-* headers parsing.
 
-[![Build Status](https://secure.travis-ci.org/hapijs/content.svg)](http://travis-ci.org/hapijs/content)
+[![Build Status](https://secure.travis-ci.org/hapijs/content.svg)](http://travis-ci.org/hapijs/content) [![Greenkeeper badge](https://badges.greenkeeper.io/hapijs/content.svg)](https://greenkeeper.io/)
 
 ## Usage
 
