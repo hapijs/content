@@ -1,7 +1,7 @@
 {
   "name": "@hapi/content",
   "description": "HTTP Content-* headers parsing",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "repository": "git://github.com/hapijs/content",
   "main": "lib/index.js",
   "keywords": [
