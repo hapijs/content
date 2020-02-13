@@ -169,4 +169,10 @@ describe('disposition()', () => {
         const header = 'form-data; name="file"; filename=file.jpg; __proto__=x';
         expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
     });
+
+    it('errors on __proto__ name param value', () => {
+
+        const header = 'form-data; name="__proto__"; filename=file.jpg';
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
+    });
 });
