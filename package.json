@@ -1,8 +1,11 @@
 {
-  "name": "@hapi/content",
+  "name": "@commercial/content",
   "description": "HTTP Content-* headers parsing",
   "version": "5.0.2",
   "repository": "git://github.com/hapijs/content",
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "main": "lib/index.js",
   "files": [
     "lib"
@@ -15,7 +18,7 @@
     "content-disposition"
   ],
   "dependencies": {
-    "@hapi/boom": "9.x.x"
+    "@commercial/boom": "9.x.x"
   },
   "devDependencies": {
     "@hapi/code": "8.x.x",
@@ -25,5 +28,5 @@
     "test": "lab -a @hapi/code -t 100 -L",
     "test-cov-html": "lab -a @hapi/code -r html -o coverage.html"
   },
-  "license": "BSD-3-Clause"
+  "license": "SEE LICENSE IN LICENSE.md"
 }
