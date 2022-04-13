@@ -5,14 +5,17 @@
 
 ### `type(header)`
 
-Generates an object containing the associated mime-type and the boundary (if specified).
+Generates an object containing the associated mime-type, charset and the boundary (if specified).
 
 ```js
 Content.type('application/json; some=property; and="another"');
 // { mime: 'application/json' }
 
-Content.type('application/json; boundary=asdf');
-// { mime: 'application/json', boundary: 'asdf' }
+Content.type('text/html; charset=utf-8')
+// { mime: 'text/html', charset: 'utf-8' }
+
+Content.type('multipart/form-data; boundary=asdf');
+// { mime: 'multipart/form-data', boundary: 'asdf' }
 ```
 
 If the header is invalid (malformed) or missing required data, such as a `multipart/form-data` header missing its `boundary`, it returns an HTTP `Bad Request` error.
