@@ -49,6 +49,43 @@ describe('type()', () => {
         expect(type.boundary).to.equal('abcdefghijklm');
     });
 
+    it('parses header (charset)', () => {
+
+        const type = Content.type('application/json; charset=utf-8');
+        expect(type.mime).to.equal('application/json');
+        expect(type.charset).to.equal('utf-8');
+    });
+
+    it('parses header (quoted charset)', () => {
+
+        const type = Content.type('application/json; charset="iso-8859-1"');
+        expect(type.mime).to.equal('application/json');
+        expect(type.charset).to.equal('iso-8859-1');
+    });
+
+    it('parses header (charset and boundary)', () => {
+
+        const type = Content.type('multipart/form-data; charset=utf-8; boundary=abcdefghijklm');
+        expect(type.mime).to.equal('multipart/form-data');
+        expect(type.charset).to.equal('utf-8');
+        expect(type.boundary).to.equal('abcdefghijklm');
+    });
+
+    it('parses header (boundary and charset)', () => {
+
+        const type = Content.type('multipart/form-data; boundary=abcdefghijklm; charset=utf-8');
+        expect(type.mime).to.equal('multipart/form-data');
+        expect(type.charset).to.equal('utf-8');
+        expect(type.boundary).to.equal('abcdefghijklm');
+    });
+
+    it('parses header (uppercase)', () => {
+
+        const type = Content.type('TEXT/HTML; CHARSET=EUC-KR');
+        expect(type.mime).to.equal('text/html');
+        expect(type.charset).to.equal('euc-kr');
+    });
+
     it('handles large number of OWS', () => {
 
         const now = Date.now();
@@ -78,7 +115,15 @@ describe('type()', () => {
 
     it('handles multiple boundary params', () => {
 
-        const header = '0/\\x00;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#;boundary=#"';
+        const header = `multipart/form-data ${new Array(80000).join(';boundary=#')}`;
+        const now = Date.now();
+        Content.type(header);
+        expect(Date.now() - now).to.be.below(100);
+    });
+
+    it('handles multiple charset params', () => {
+
+        const header = `text/plain ${new Array(80000).join(';charset=utf-8')}`;
         const now = Date.now();
         Content.type(header);
         expect(Date.now() - now).to.be.below(100);
