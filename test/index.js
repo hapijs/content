@@ -117,7 +117,7 @@ describe('type()', () => {
 
         const header = `multipart/form-data ${new Array(80000).join(';boundary=#')}`;
         const now = Date.now();
-        Content.type(header);
+        expect(() => Content.type(header)).to.throw('Invalid content-type header: duplicate parameter');
         expect(Date.now() - now).to.be.below(100);
     });
 
@@ -125,7 +125,7 @@ describe('type()', () => {
 
         const header = `text/plain ${new Array(80000).join(';charset=utf-8')}`;
         const now = Date.now();
-        Content.type(header);
+        expect(() => Content.type(header)).to.throw('Invalid content-type header: duplicate parameter');
         expect(Date.now() - now).to.be.below(100);
     });
 
@@ -140,6 +140,26 @@ describe('type()', () => {
     it('errors on content-type with embedded newline', () => {
 
         expect(() => Content.type('application/json\n; charset=utf-8')).to.throw('Invalid content-type header');
+    });
+
+    it('errors on duplicate charset parameter', () => {
+
+        expect(() => Content.type('text/plain; charset=utf-8; charset=ascii')).to.throw('Invalid content-type header: duplicate parameter');
+    });
+
+    it('errors on duplicate boundary parameter', () => {
+
+        expect(() => Content.type('multipart/form-data; boundary=abc; boundary=def')).to.throw('Invalid content-type header: duplicate parameter');
+    });
+
+    it('errors on invalid token characters in type', () => {
+
+        expect(() => Content.type('text/html\x00')).to.throw('Invalid content-type header');
+    });
+
+    it('errors on invalid token characters in subtype', () => {
+
+        expect(() => Content.type('text/<html>')).to.throw('Invalid content-type header');
     });
 });
 
@@ -350,5 +370,59 @@ describe('disposition()', () => {
 
         const header = 'form-data; name="file"; filename="test.jpg"  ';
         expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'test.jpg' });
+    });
+
+    it('errors on constructor param', () => {
+
+        const header = 'form-data; name="file"; constructor=test';
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
+    });
+
+    it('errors on toString param', () => {
+
+        const header = 'form-data; name="file"; toString=test';
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
+    });
+
+    it('handles single quote in ext-value', () => {
+
+        const header = 'form-data; name="file"; filename*=utf-8\'en\'it\'s%20here.php';
+        expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'it\'s here.php' });
+    });
+
+    it('errors on duplicate parameter names', () => {
+
+        const header = 'form-data; name="file"; filename="safe.txt"; filename="shell.php"';
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
+    });
+
+    it('allows ext-value to override filename parameter', () => {
+
+        const header = 'form-data; name="file"; filename="fallback.jpg"; filename*=utf-8\'\'extended.jpg';
+        expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'extended.jpg' });
+    });
+
+    it('keeps ext-value when filename parameter follows', () => {
+
+        const header = 'form-data; name="file"; filename*=utf-8\'\'extended.jpg; filename="fallback.jpg"';
+        expect(Content.disposition(header)).to.equal({ name: 'file', filename: 'extended.jpg' });
+    });
+
+    it('errors on duplicate ext-value parameters', () => {
+
+        const header = 'form-data; name="file"; filename*=utf-8\'\'a.jpg; filename*=utf-8\'\'b.jpg';
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
+    });
+
+    it('errors on duplicate even when ext-value override is present', () => {
+
+        const header = 'form-data; name="avatar"; name*=utf-8\'\'admin; filename="safe.txt"; filename="shell.php"';
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
+    });
+
+    it('errors on duplicate name parameters', () => {
+
+        const header = 'form-data; name="avatar"; name="admin"';
+        expect(() => Content.disposition(header)).to.throw('Invalid content-disposition header format includes invalid parameters');
     });
 });
