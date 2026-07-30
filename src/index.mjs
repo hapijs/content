@@ -1,10 +1,4 @@
-'use strict';
-
-const Boom = require('@hapi/boom');
-
-
-const internals = {};
-
+import * as Boom from '@hapi/boom';
 
 /*
     RFC 7231 Section 3.1.1.1
@@ -15,38 +9,36 @@ const internals = {};
     parameter  = token "=" ( token / quoted-string )
 */
 
-//                             1: type/subtype                                           2: params
-internals.contentTypeRegex = /^([A-Za-z0-9!#$%&'*+.^_`|~-]+\/[A-Za-z0-9!#$%&'*+.^_`|~-]+)([ \t;][^\r\n]*)?$/;
+//                         1: type/subtype                                           2: params
+const contentTypeRegex = /^([A-Za-z0-9!#$%&'*+.^_`|~-]+\/[A-Za-z0-9!#$%&'*+.^_`|~-]+)([ \t;][^\r\n]*)?$/;
 
-//                                             1: "b"   2: b
-internals.charsetParamRegex = /;\s*charset=(?:"([^"]+)"|([^;"\s]+))/i;
+//                                         1: "b"   2: b
+const charsetParamRegex = /;\s*charset=(?:"([^"]+)"|([^;"\s]+))/i;
 
-//                                               1: "b"   2: b
-internals.boundaryParamRegex = /;\s*boundary=(?:"([^"]+)"|([^;"\s]+))/i;
+//                                           1: "b"   2: b
+const boundaryParamRegex = /;\s*boundary=(?:"([^"]+)"|([^;"\s]+))/i;
 
-
-exports.type = function (header) {
-
+export function type(header) {
     if (!header) {
         throw Boom.badRequest('Invalid content-type header');
     }
 
-    const match = header.match(internals.contentTypeRegex);
+    const match = header.match(contentTypeRegex);
     if (!match) {
         throw Boom.badRequest('Invalid content-type header');
     }
 
     const result = {
-        mime: match[1].toLowerCase()
+        mime: match[1].toLowerCase(),
     };
 
     const params = match[2];
     if (params) {
-        const param = params.match(internals.charsetParamRegex);
+        const param = params.match(charsetParamRegex);
         if (param) {
             result.charset = (param[1] || param[2]).toLowerCase();
 
-            if (internals.charsetParamRegex.test(params.slice(param.index + param[0].length))) {
+            if (charsetParamRegex.test(params.slice(param.index + param[0].length))) {
                 throw Boom.badRequest('Invalid content-type header: duplicate parameter');
             }
         }
@@ -54,11 +46,11 @@ exports.type = function (header) {
 
     if (result.mime.indexOf('multipart/') === 0) {
         if (params) {
-            const param = params.match(internals.boundaryParamRegex);
+            const param = params.match(boundaryParamRegex);
             if (param) {
                 result.boundary = param[1] || param[2];
 
-                if (internals.boundaryParamRegex.test(params.slice(param.index + param[0].length))) {
+                if (boundaryParamRegex.test(params.slice(param.index + param[0].length))) {
                     throw Boom.badRequest('Invalid content-type header: duplicate parameter');
                 }
             }
@@ -70,8 +62,7 @@ exports.type = function (header) {
     }
 
     return result;
-};
-
+}
 
 /*
     RFC 6266 Section 4.1 (http://tools.ietf.org/html/rfc6266#section-4.1)
@@ -89,19 +80,18 @@ exports.type = function (header) {
     for filenames and is likely to be ignored by recipients.
 */
 
+const contentDispositionRegex = /^\s*form-data\s*(?:;\s*(\S.*))?$/i;
 
-internals.contentDispositionRegex = /^\s*form-data\s*(?:;\s*(\S.*))?$/i;
+//                                    1: name     2: *            3: ext-value                      4: quoted  5: token
+const contentDispositionParamRegex =
+    /([^\=\*\s]+)(\*)?\s*\=\s*(?:([^;'"\s]+\'[\w-]*\'[^;\s]+)|(?:\"([^"]*)\")|([^;\s]*))/g;
 
-//                                        1: name     2: *            3: ext-value                      4: quoted  5: token
-internals.contentDispositionParamRegex = /([^\=\*\s]+)(\*)?\s*\=\s*(?:([^;'"\s]+\'[\w-]*\'[^;\s]+)|(?:\"([^"]*)\")|([^;\s]*))/g;
-
-exports.disposition = function (header) {
-
+export function disposition(header) {
     if (!header) {
         throw Boom.badRequest('Missing content-disposition header');
     }
 
-    const match = header.match(internals.contentDispositionRegex);
+    const match = header.match(contentDispositionRegex);
     if (!match) {
         throw Boom.badRequest('Invalid content-disposition header format');
     }
@@ -113,8 +103,7 @@ exports.disposition = function (header) {
 
     const result = {};
     const extKeys = new Set();
-    parameters.replace(internals.contentDispositionParamRegex, ($0, $1, $2, $3, $4, $5) => {
-
+    parameters.replace(contentDispositionParamRegex, ($0, $1, $2, $3, $4, $5) => {
         if ($1 === '__proto__') {
             throw Boom.badRequest('Invalid content-disposition header format includes invalid parameters');
         }
@@ -122,12 +111,10 @@ exports.disposition = function (header) {
         if (result[$1] !== undefined) {
             if ($2 && !extKeys.has($1)) {
                 // ext-value overriding regular value - allowed per RFC 6266 Section 4.3
-            }
-            else if (!$2 && extKeys.has($1)) {
+            } else if (!$2 && extKeys.has($1)) {
                 // Regular value after ext-value - ignore (keep ext-value)
                 return;
-            }
-            else {
+            } else {
                 throw Boom.badRequest('Invalid content-disposition header format includes invalid parameters');
             }
         }
@@ -144,19 +131,15 @@ exports.disposition = function (header) {
             }
 
             try {
-                value = decodeURIComponent($3.slice($3.indexOf('\'', $3.indexOf('\'') + 1) + 1));
-            }
-            catch (err) {
+                value = decodeURIComponent($3.slice($3.indexOf("'", $3.indexOf("'") + 1) + 1));
+            } catch {
                 throw Boom.badRequest('Invalid content-disposition header format includes invalid parameters');
             }
-        }
-        else {
+        } else {
             value = $4 || $5 || '';
         }
 
-        if ($1 === 'name' &&
-            value === '__proto__') {
-
+        if ($1 === 'name' && value === '__proto__') {
             throw Boom.badRequest('Invalid content-disposition header format includes invalid parameters');
         }
 
@@ -168,4 +151,4 @@ exports.disposition = function (header) {
     }
 
     return result;
-};
+}
