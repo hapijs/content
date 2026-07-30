@@ -2,7 +2,7 @@
 **/package-lock.json
 **/yarn.lock
 
-coverage.*
+coverage/
 
 **/.DS_Store
 **/._*

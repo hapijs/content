@@ -1,35 +1,50 @@
 {
-  "name": "@hapi/content",
-  "description": "HTTP Content-* headers parsing",
-  "version": "6.0.2",
-  "repository": "git://github.com/hapijs/content",
-  "main": "lib/index.js",
-  "files": [
-    "lib"
-  ],
-  "keywords": [
-    "HTTP",
-    "header",
-    "content",
-    "content-type",
-    "content-disposition"
-  ],
-  "eslintConfig": {
-    "extends": [
-      "plugin:@hapi/module"
-    ]
-  },
-  "dependencies": {
-    "@hapi/boom": "^10.0.0"
-  },
-  "devDependencies": {
-    "@hapi/code": "^9.0.0",
-    "@hapi/eslint-plugin": "^6.0.0",
-    "@hapi/lab": "^25.0.1"
-  },
-  "scripts": {
-    "test": "lab -a @hapi/code -t 100 -L",
-    "test-cov-html": "lab -a @hapi/code -r html -o coverage.html"
-  },
-  "license": "BSD-3-Clause"
+    "name": "@hapi/content",
+    "version": "6.0.2",
+    "description": "HTTP Content-* headers parsing",
+    "keywords": [
+        "HTTP",
+        "content",
+        "content-disposition",
+        "content-type",
+        "header"
+    ],
+    "license": "BSD-3-Clause",
+    "repository": "git://github.com/hapijs/content",
+    "files": [
+        "src",
+        "API.md",
+        "README.md"
+    ],
+    "type": "module",
+    "types": "src/index.d.mts",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.mts",
+            "default": "./src/index.mjs"
+        }
+    },
+    "scripts": {
+        "test": "vitest run --coverage",
+        "typecheck": "tsc --noEmit",
+        "lint": "oxlint",
+        "lint:fix": "oxlint --fix",
+        "fmt": "oxfmt --check",
+        "fmt:fix": "oxfmt",
+        "check": "npm run lint && npm run fmt && npm run typecheck && npm test"
+    },
+    "dependencies": {
+        "@hapi/boom": "^10.0.0"
+    },
+    "devDependencies": {
+        "@hapi/oxc-plugin": "^1.0.2",
+        "@vitest/coverage-v8": "^4.1.9",
+        "oxfmt": "^0.61.0",
+        "oxlint": "^1.76.0",
+        "typescript": "^6.0.3",
+        "vitest": "^4.1.9"
+    },
+    "engines": {
+        "node": ">=22"
+    }
 }

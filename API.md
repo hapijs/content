@@ -1,4 +1,3 @@
-
 ## Usage
 
 **content** allows to parse HTTP `Content-*` headers, currently based on the rules established in both [RFC 7231 Section 3.1.1.1](https://tools.ietf.org/html/rfc7231#section-3.1.1.1) and [RFC 6266 Section 4.1](http://tools.ietf.org/html/rfc6266#section-4.1).
@@ -11,7 +10,7 @@ Generates an object containing the associated mime-type, charset and the boundar
 Content.type('application/json; some=property; and="another"');
 // { mime: 'application/json' }
 
-Content.type('text/html; charset=utf-8')
+Content.type('text/html; charset=utf-8');
 // { mime: 'text/html', charset: 'utf-8' }
 
 Content.type('multipart/form-data; boundary=asdf');
