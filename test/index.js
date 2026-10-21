@@ -271,6 +271,22 @@ describe('disposition()', () => {
         expect(Date.now() - now).to.be.below(100);
     });
 
+    it('handles ReDoS exploit (quadratic backtracking via long parameter without equals)', () => {
+
+        const header = `form-data; name="f"; ${'a'.repeat(64000)}`;
+        const now = Date.now();
+        expect(Content.disposition(header)).to.equal({ name: 'f' });
+        expect(Date.now() - now).to.be.below(100);
+    });
+
+    it('handles ReDoS exploit (quadratic backtracking via long parameter without equals before other parameters)', () => {
+
+        const header = `form-data; ${'a'.repeat(64000)}; name="f"; filename=file.jpg`;
+        const now = Date.now();
+        expect(Content.disposition(header)).to.equal({ name: 'f', filename: 'file.jpg' });
+        expect(Date.now() - now).to.be.below(100);
+    });
+
     it('handles large number of spaces around equals', () => {
 
         const now = Date.now();
